@@ -21,7 +21,7 @@ import { RiNotification3Line } from "react-icons/ri";
 import { AiOutlineNotification } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import { FaUserCog } from "react-icons/fa";
-import ubilogo from "@/../public/ub-logo-white.png";
+import ubilogo from "@/../public/logo-untanglebi-white.png";
 import { FaHeadset } from "react-icons/fa";
 import { LiaUserCogSolid } from "react-icons/lia";
 import { PiUserCircleFill } from "react-icons/pi";

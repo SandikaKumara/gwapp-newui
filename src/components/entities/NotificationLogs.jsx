@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { MdCheckCircleOutline } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
+import { IoMdCheckboxOutline } from "react-icons/io";
+import { MdOutlineCancelPresentation } from "react-icons/md";
 
 function NotificationLogs({ selectedNotificationId, refresh }) {
   const [logs, setLogs] = useState([]);
@@ -20,31 +22,32 @@ function NotificationLogs({ selectedNotificationId, refresh }) {
 
     fetchLogs(selectedNotificationId);
   }, [selectedNotificationId, refresh]);
+
   return (
-    <div className="flex flex-col gap-2 text-sm ">
-      <div className=" flex bg-blue-100 p-1 font-extrabold rounded-md ">
+    <div className="flex flex-col">
+      <div className=" flex bg-indigo-950 text-indigo-50 p-1 font-bold uppercase rounded ">
         <div className="w-[600px] pl-2">Name</div>
         <div className="w-[300px]">Sent</div>
         <div className="w-[300px]">Read</div>
       </div>
 
       {logs.map((log) => (
-        <div key={log.id} className="flex pl-2 hover:bg-slate-100">
-          <div className="w-[600px] font-mono">
+        <div key={log.id} className="flex hover:bg-blue-100 px-2 py-1">
+          <div className="w-[600px]">
             {log.user?.firstName} {log.user?.lastName}
           </div>
           <div className="w-[300px]">
             {log?.sent ? (
-              <MdCheckCircleOutline className="text-green-500 text-2xl" />
+              <IoMdCheckboxOutline className="text-green-600 text-2xl" />
             ) : (
-              <MdOutlineCancel className="text-pink-500 text-2xl" />
+              <MdOutlineCancelPresentation className="text-pink-300 text-2xl" />
             )}
           </div>
           <div className="w-[300px]">
             {log?.read ? (
-              <MdCheckCircleOutline className="text-green-500 text-2xl" />
+              <IoMdCheckboxOutline className="text-green-600 text-2xl" />
             ) : (
-              <MdOutlineCancel className="text-pink-500 text-2xl" />
+              <MdOutlineCancelPresentation className="text-pink-300 text-2xl" />
             )}
           </div>
         </div>

@@ -2,7 +2,14 @@
 
 import MandatorySpan from "./MandatorySpan";
 
-const TextArea = ({ label, rows = "3", name, value, required = false }) => {
+const TextArea = ({
+  label,
+  rows = "3",
+  name,
+  value,
+  required = false,
+  onchange,
+}) => {
   return (
     <div className="flex flex-col mb-4">
       <label className="mb-1 text-gray-600" htmlFor="name">
@@ -13,6 +20,8 @@ const TextArea = ({ label, rows = "3", name, value, required = false }) => {
         rows={rows}
         name={name}
         defaultValue={value}
+        onChange={onchange}
+        onKeyUp={onchange}
       />
     </div>
   );

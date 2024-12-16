@@ -19,7 +19,67 @@ export const createLogAuditEntry = async (userId = null, status = null, userName
 }
 
 
-export const getLogAudits = async (searchText) => {
+// export const getLogAuditsOld = async (searchText) => {
+//     try {
+//         const result = await prisma.LoginAudit.findMany({
+//             where: {
+//                 OR: [
+//                     {
+//                         remarks: {
+//                             contains: searchText
+//                         }
+//                     },
+//                     {
+//                         userName: {
+//                             contains: searchText
+//                         }
+//                     },
+//                     {
+//                         status: {
+//                             contains: searchText
+//                         }
+//                     },
+//                     {
+//                         user: {
+//                             firstName: {
+//                                 contains: searchText
+//                             }
+//                         }
+//                     },
+//                     {
+//                         user: {
+//                             lastName: {
+//                                 contains: searchText
+//                             }
+//                         }
+//                     },
+
+//                 ]
+
+//             },
+//             include: {
+//                 user: {
+//                     select: {
+//                         firstName: true,
+//                         lastName: true
+//                     }
+//                 }
+//             },
+//             orderBy: {
+//                 createdAt: 'desc'
+//             },
+//             take: 20,
+//             skip: 10
+//         })
+
+//         return { type: 'success', message: result }
+//     } catch (err) {
+//         return { type: 'error', message: `An error occurred while fetching audit log entries. ${err.message}` }
+//     }
+// }
+
+
+export const getLogAudits = async (searchText, page = 1, pageSize = 25) => {
     try {
         const result = await prisma.LoginAudit.findMany({
             where: {
@@ -67,10 +127,53 @@ export const getLogAudits = async (searchText) => {
             },
             orderBy: {
                 createdAt: 'desc'
-            }
+            },
+            take: pageSize, // Limit the number of results
+            skip: (page - 1) * pageSize // Skip results based on current page
         })
 
-        return { type: 'success', message: result }
+
+        // Get total count of records for pagination metadata
+        const totalCount = await prisma.LoginAudit.count({
+            where: {
+                OR: [
+                    {
+                        remarks: {
+                            contains: searchText
+                        }
+                    },
+                    {
+                        userName: {
+                            contains: searchText
+                        }
+                    },
+                    {
+                        status: {
+                            contains: searchText
+                        }
+                    },
+                    {
+                        user: {
+                            firstName: {
+                                contains: searchText
+                            }
+                        }
+                    },
+                    {
+                        user: {
+                            lastName: {
+                                contains: searchText
+                            }
+                        }
+                    },
+                ]
+            }
+        });
+
+        // Calculate total pages
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        return { type: 'success', message: result, pagination: { page, pageSize, totalCount, totalPages } }
     } catch (err) {
         return { type: 'error', message: `An error occurred while fetching audit log entries. ${err.message}` }
     }

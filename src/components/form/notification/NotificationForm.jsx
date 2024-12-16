@@ -17,7 +17,7 @@ import { getUsersOfTenant } from "@/dbActions/userTenant";
 import { getUserUserRoleListAction } from "@/dbActions/userUserRole";
 import { useMessageBox } from "@/providers/MessageProvider";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import validateNotificationForm from "./notificationFormValidations";
 import Link from "next/link";
 import { FaSave } from "react-icons/fa";
@@ -28,7 +28,6 @@ import {
   sendNotificationsAction,
 } from "@/dbActions/notificationLog";
 import NotificationLogs from "@/components/entities/NotificationLogs";
-import { useSession } from "@/providers/SessionProvider";
 
 function NotificationForm({ selectedNotificationId }) {
   const [errors, setErrors] = useState([]);
@@ -191,7 +190,7 @@ function NotificationForm({ selectedNotificationId }) {
         <LoadingComponent />
       ) : (
         <form
-          className="flex flex-col gap-3 py-4 px-5 border-t-2 border-gray-300 mt-4"
+          className="flex flex-col gap-3 py-6 px-6 bg-white mt-4 rounded w-1/2 min-w-[300px] mb-6 shadow-md"
           action={handleFormSubmit}
         >
           <OptionBox
@@ -231,7 +230,7 @@ function NotificationForm({ selectedNotificationId }) {
           <TextArea
             label={"Message"}
             name={"message"}
-            rows="4"
+            rows="10"
             required={true}
             value={selectedNotification?.message || ""}
           />
@@ -260,10 +259,10 @@ function NotificationForm({ selectedNotificationId }) {
             </div>
           )}
 
-          <div className="flex flex-col gap-3 mt-4">
+          <div className="flex justify-start items-center gap-3 py-6 mt-2">
             {showSaveButton && (
               <button
-                className="bg-green-700 w-[500px] py-2 px-6 rounded-full flex items-center justify-center gap-2 text-green-50 "
+                className="bg-blue-500 rounded text-sm hover:bg-blue-300 hover:text-blue-100 cursor-pointer flex items-center justify-center gap-2 py-2 px-4 text-white text-wrap mt-6 "
                 name={"submit"}
                 value={"create"}
               >
@@ -274,7 +273,7 @@ function NotificationForm({ selectedNotificationId }) {
 
             {showGenerateButton && (
               <button
-                className="bg-orange-400 w-[500px] py-2 px-6 rounded-full flex items-center justify-center gap-2 text-green-50"
+                className="bg-amber-500 rounded text-sm hover:bg-amber-300 hover:text-amber-100 cursor-pointer flex items-center justify-center gap-2 py-2 px-4 text-white text-wrap mt-6 "
                 name={"submit"}
                 value={"generate"}
               >
@@ -285,7 +284,7 @@ function NotificationForm({ selectedNotificationId }) {
 
             {showSendButton && (
               <button
-                className="bg-cyan-700 w-[500px] py-2 px-6 rounded-full flex items-center justify-center gap-2 text-green-50"
+                className="bg-emerald-500 rounded text-sm hover:bg-emerald-300 hover:text-emerald-100 cursor-pointer flex items-center justify-center gap-2 py-2 px-4 text-white text-wrap mt-6 "
                 name={"submit"}
                 value={"send"}
               >

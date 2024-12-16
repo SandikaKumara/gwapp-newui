@@ -8,6 +8,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import Link from "next/link";
 import Switch from "../Switch";
 import { format } from "date-fns";
+import { FaEdit } from "react-icons/fa";
+import ContentViewer from "../ContentViewer";
 
 function NotificationList() {
   const [searchText, setSearchText] = useState("");
@@ -45,7 +47,7 @@ function NotificationList() {
   };
 
   return (
-    <section className="flex flex-col gap-3 flex-wrap ">
+    <section className="flex flex-col gap-3 flex-wrap">
       <SearchBox ref={searchBoxRef} handleSearch={handleSearch} />
 
       {loading && <LoadingComponent />}
@@ -53,15 +55,16 @@ function NotificationList() {
       {notificationList.map((notification) => (
         <div
           key={notification.id}
-          className="flex justify-between flex-wrap gap-1 rounded-md w-full h-fit border-dotted border-b-2 border-zinc-300 p-3 text-sm"
+          className="flex flex-col justify-between gap-1 flex-wrap rounded w-full h-fit bg-white shadow-md hover:bg-gray-100"
         >
-          <div className="flex flex-col gap-1 min-w-[300px]">
+          <div className="flex flex-col gap-1 min-w-[300px] my-2 bg-gray-400 text-gray-50 px-4 py-2">
             <div className="font-semibold">{notification.title}</div>
             <div className="text-xs">{notification.user?.firstName}</div>
           </div>
 
-          <div className="flex flex-col gap-1 min-w-[300px]">
-            <div className="font-semibold">{notification.message}</div>
+          <div className="flex flex-col gap-1 min-w-[300px] px-2">
+            <ContentViewer content={notification.message} />
+            {/* <div className="">{notification.message}</div> */}
             <div className="text-xs">{notification.tenant?.name}</div>
           </div>
 
@@ -75,14 +78,14 @@ function NotificationList() {
             </div>
           </div> */}
 
-          <div className="flex flex-col justify-center items-start min-w-[300px] text-xs">
-            Created At:{" "}
+          <div className="flex justify-between items-start min-w-[300px] text-xs px-4 py-2">
             {format(new Date(notification.createdAt), "yyyy/MM/dd, HH:mm:ss")}
-          </div>
 
-          <div className="font-bold flex flex-col justify-start items-end cursor-pointer">
             <Link href={`/dashboard/notification/${notification.id}`}>
-              <BsThreeDotsVertical title="Edit" />
+              <FaEdit
+                className="text-gray-500 hover:text-gray-900 text-xl"
+                title="Edit"
+              />
             </Link>
           </div>
         </div>
