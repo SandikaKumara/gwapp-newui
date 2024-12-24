@@ -81,6 +81,10 @@ export async function createTenantAction(formData) {
   const imagePath = formData.get("imagePath");
   const file = formData.get("logoPath")
 
+  console.log("imagePath", imagePath);
+  console.log("file", file);
+
+
   // handle File Upload
   let logoPath;
   let newFileName;
@@ -111,7 +115,7 @@ export async function createTenantAction(formData) {
       // textHoverColor,
       // borderColor,
       // categoryTextColor,
-      ...(file && { file }) // Only include logoPath if it's defined
+      ...(logoPath && { logoPath }) // Only include logoPath if it's defined
     };
 
     const result = await prisma.Tenant.create({
@@ -142,6 +146,8 @@ export async function createTenantAction(formData) {
 
     return { type: 'success', message: `Successfully registered the tenant : ${result.name}, assigned ID : ${result.id}`, id: result.id }
   } catch (err) {
+    console.log(err);
+
     return { type: 'error', message: `An error occurred while registering the tenant : ${err}` }
   }
 }

@@ -29,6 +29,8 @@ import { BsBuilding } from "react-icons/bs";
 import { BsEnvelopeAt } from "react-icons/bs";
 import { BsPerson } from "react-icons/bs";
 import Modal from "./Modal";
+import { format } from "date-fns";
+import ContentViewer from "./ContentViewer";
 
 function Navbar({ handleShowSidebar, showSidebar }) {
   const [showTenantSelection, setShowTenantSelection] = useState(false);
@@ -39,28 +41,35 @@ function Navbar({ handleShowSidebar, showSidebar }) {
   const [previewImage, setPreviewImage] = useState();
   const [noticeCount, setNoticeCount] = useState(1);
   const [loaded, setLoaded] = useState(false);
+  const [notice, setNotice] = useState();
 
   const showMessage = useMessageBox();
 
   const { sessionTenant, setRefresh } = useSession();
   const router = useRouter();
 
-  const dialogRef = useRef(null);
+  // const dialogRef = useRef(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenTenantSwitch, setIsModalOpenTenantSwitch] = useState(false);
+  const openModalTenantSwitch = () => setIsModalOpenTenantSwitch(true);
+  const closeModalTenantSwitch = () => setIsModalOpenTenantSwitch(false);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-  const openDialog = () => {
-    dialogRef.current.showModal();
-    document.body.style.overflow = "hidden"; // Disable scrolling
+  const [isModalOpenNotification, setIsModalOpenNotification] = useState(false);
+  const openModalNotification = (notification) => {
+    setNotice(notification);
+    setIsModalOpenNotification(true);
   };
+  const closeModalNotification = () => setIsModalOpenNotification(false);
 
-  const closeDialog = () => {
-    dialogRef.current.close();
-    document.body.style.overflow = ""; // Re-enable scrolling
-  };
+  // const openDialog = () => {
+  //   dialogRef.current.showModal();
+  //   document.body.style.overflow = "hidden"; // Disable scrolling
+  // };
+
+  // const closeDialog = () => {
+  //   dialogRef.current.close();
+  //   document.body.style.overflow = ""; // Re-enable scrolling
+  // };
 
   const handleLogOut = async () => {
     const result = await logOut();
@@ -111,7 +120,7 @@ function Navbar({ handleShowSidebar, showSidebar }) {
   // }, [userTenants]);
 
   const handleOnTenantChange = async (e) => {
-    closeModal();
+    closeModalTenantSwitch();
     const result = await updateSessionTenant(e);
     if (result) {
       showMessage(result.type, result.message);
@@ -193,6 +202,7 @@ function Navbar({ handleShowSidebar, showSidebar }) {
             <Notification
               isAdmin={sessionTenant?.isAdmin}
               userId={sessionTenant?.userId}
+              openModalNotification={openModalNotification}
             />
           )}
 
@@ -279,7 +289,7 @@ function Navbar({ handleShowSidebar, showSidebar }) {
                       //     setShowTenantSelection(!showTenantSelection)
                       //   }
                       // >
-                      <button onClick={openModal}>
+                      <button onClick={openModalTenantSwitch}>
                         <TbSwitch3 className="text-lg text-blue-600 hover:text-blue-300" />
                       </button>
                     )}
@@ -357,22 +367,11 @@ function Navbar({ handleShowSidebar, showSidebar }) {
         </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal} title={"Select Tenant"}>
-        {/* <div className="flex w-fit gap-2">
-          <select
-            className="text-sm text-gray-700 outline-none px-3 py-1 font-sans font-bold bg-transparent
-              border-b-[1px] border-gray-300 w-fit pl-8 pr-8"
-            onChange={handleOnTenantChange}
-          >
-            <option value="0" className="bg-gray-50"></option>
-            {userTenants.map((item) => (
-              <option key={item.id} value={item.id} className="bg-gray-50">
-                {item.name}
-              </option>
-            ))}
-          </select>
-        </div> */}
-
+      <Modal
+        isOpen={isModalOpenTenantSwitch}
+        onClose={closeModalTenantSwitch}
+        title={"Select Tenant"}
+      >
         <div className="w-full p-2 ">
           {userTenants.map((item) => (
             <div
@@ -386,6 +385,21 @@ function Navbar({ handleShowSidebar, showSidebar }) {
             </div>
           ))}
         </div>
+      </Modal>
+
+      <Modal
+        isOpen={isModalOpenNotification}
+        onClose={closeModalNotification}
+        title={notice?.title}
+      >
+        {/* <p > {notice?.message}</p> */}
+        <p className="mb-5">
+          <ContentViewer content={notice?.message} />
+        </p>
+        <p className="text-sm">
+          {notice?.createdAt &&
+            format(new Date(notice?.createdAt), "yyyy/MM/dd, HH:mm:ss")}
+        </p>
       </Modal>
     </nav>
   );

@@ -89,7 +89,7 @@ const TicketForm = ({ selectedTicket }) => {
 
   return (
     <form
-      className="flex flex-col gap-3 py-4 px-5 border-t-2 border-gray-300 mt-4"
+      className="flex flex-col gap-3 py-6 px-6 bg-white mt-4 rounded w-1/2 min-w-[300px] mb-6 shadow-md"
       encType="multipart/form-data"
       onSubmit={handleFormSubmit}
     >
@@ -136,7 +136,10 @@ const TicketForm = ({ selectedTicket }) => {
         </div>
       )}
 
-      <SaveButton label="Create" />
+      <div className="flex justify-end">
+        <SaveButton label="Create" />
+      </div>
+      {/* <SaveButton label="Create" /> */}
     </form>
   );
 };

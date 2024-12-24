@@ -14,7 +14,7 @@ export async function getTicketAction(id) {
         const ticket = await prisma.Ticket.findUnique({
             where: {
                 id: id,
-                ...(session?.isAdmin && {
+                ...(!session?.isAdmin && {
                     userId: session?.userId
                 })
             },
@@ -66,8 +66,28 @@ export async function createTicketAction(formData) {
     let newFileName;
 
     try {
+        // get the max slug id
+        const lastTicket = await prisma.Ticket.findFirst({
+            orderBy: {
+                createdAt: 'desc',
+            },
+            select: {
+                slug: true
+            }
+        })
+
+        // Generate the next slug
+        let nextSlug = 1; // Default to 1 if no tickets exist
+        if (lastTicket && lastTicket.slug) {
+            const lastSlug = parseInt(lastTicket.slug, 10);
+            if (!isNaN(lastSlug)) {
+                nextSlug = lastSlug + 1;
+            }
+        }
+
         const result = await prisma.Ticket.create({
             data: {
+                slug: nextSlug,
                 title,
                 content,
                 status: 'CREATED',

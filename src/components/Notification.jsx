@@ -8,11 +8,14 @@ import { useSession } from "@/providers/SessionProvider";
 import { AiFillNotification } from "react-icons/ai";
 import { FaRegBell } from "react-icons/fa";
 
-function Notification({ isAdmin }) {
+function Notification({ isAdmin, openModalNotification }) {
   const [numberOfMessages, setNumberOfMessages] = useState();
   const [showNotification, setShowNotification] = useState(false);
   const [noticeCount, setNoticeCount] = useState(0);
   const [messages, setMessages] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
+  const changeRefreshStatus = (prev) => setRefresh(!prev);
 
   useEffect(() => {
     const fetchUserNotifications = async () => {
@@ -32,14 +35,14 @@ function Notification({ isAdmin }) {
     const interval = setInterval(fetchUserNotifications, 300000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="flex justify-center group items-center relative hover:bg-white hover:bg-opacity-5 px-5">
       <div className="relative">
-        <Link href={"/dashboard/userNotification"}>
-          <FaRegBell className="text-2xl text-white" />
-        </Link>
+        {/* <Link href={"/dashboard/userNotification"}> */}
+        <FaRegBell className="text-2xl text-white" />
+        {/* </Link> */}
 
         {noticeCount > 0 && (
           <div className="absolute -top-2 -right-4 bg-rose-600 w-6 h-6 rounded-full p-1 flex justify-center items-center">
@@ -54,30 +57,40 @@ function Notification({ isAdmin }) {
           </div> */}
       </div>
 
-      {/* <div
-        className="absolute w-[300px] h-fit -translate-x-1/2 top-6 pt-10
-    scale-x-50 scale-y-0 group-hover:scale-x-100 group-hover:scale-y-100 
-    origin-top-right transition-transform duration-300 ease-in-out 
-    group-hover:block z-10"
-      >
-        <ul className="flex flex-col gap-1">
+      <div className="flex flex-col justify-center items-start w-96 h-fit p-4 pr-4 pl-4 absolute bottom-0 right-0 translate-y-full  font-medium text-nowrap rounded-sm scale-0  opacity-100 group-hover:opacity-100 group-hover:scale-100 transform-origin transition-all duration-500 pointer-events-auto z-[30] bg-white origin-top border-2 border-indigo-100 shadow-lg">
+        <ul className="flex flex-col gap-2 w-full">
           {messages.map((message) => (
             <li key={message?.id}>
               <ChatMessage
-                header={message?.notification?.title}
-                message={message?.notification?.message}
+                notification={message?.notification}
+                logId={message?.id}
+                openModalNotification={openModalNotification}
+                setRefresh={changeRefreshStatus}
               />
             </li>
           ))}
-          
-            <li>
-              <ChatMessage
-                header={"Administrator [2024-01-20 12:00:19]"}
-                message={"Hello"}
-              />
+
+          {/* {messages.map((message) => (
+            <li key={message?.id}>
+              <ChatMessage notification={message?.notification} />
             </li>
+          ))} */}
+
+          {/* <li>
+            <ChatMessage
+              header={"Administrator [2024-01-20 12:00:19]"}
+              message={"Hello"}
+            />
+          </li> */}
         </ul>
-      </div> */}
+
+        <Link
+          className="text-sm text-blue-500 text-center w-full mt-6"
+          href={"/dashboard/userNotification"}
+        >
+          More..
+        </Link>
+      </div>
     </div>
   );
 }

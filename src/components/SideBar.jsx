@@ -22,6 +22,21 @@ function SideBar({ showSidebar, handleShowSidebar }) {
   const [selectedMenu, setSelectedMenu] = useState("");
   const [fullUrl, setFullUrl] = useState("");
   const pathname = usePathname(); // Gets the current pathname (e.g., '/dashboard')
+  const [hideMenu, setHideMenu] = useState(false);
+
+  useEffect(() => {
+    const submenu = pathname.split("/")[2];
+    const notAllowed = [
+      "admin",
+      "user",
+      "tenant",
+      "userRole",
+      "menu",
+      "notification",
+      "loginAudit",
+    ];
+    setHideMenu(!notAllowed.includes(submenu));
+  }, [pathname]);
 
   useEffect(() => {
     setLoaded(false);
@@ -65,7 +80,7 @@ function SideBar({ showSidebar, handleShowSidebar }) {
         }`}
         onClick={handleShowSidebar}
       />
-      {loaded && (
+      {loaded && hideMenu && (
         <div className="flex flex-col relative">
           {/* <Link href={"/dashboard"} className="mb-2 mt-2 pb-6">
             <div className="flex flex-col flex-shrink justify-center items-center gap-2 w-full h-full p-3">
@@ -174,7 +189,6 @@ function SideBar({ showSidebar, handleShowSidebar }) {
           </div>
         </div>
       )}
-
       <div
         className={`text-[.6rem] flex justify-center px-3 origin-top-left duration-500 ease-out transition-all transform text-gray-500 ${
           !showSidebar ? "scale-0 opacity-0" : "scale-100 opacity-100"

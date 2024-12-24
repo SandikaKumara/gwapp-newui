@@ -8,11 +8,16 @@ import { format } from "date-fns";
 import { ImAttachment } from "react-icons/im";
 
 import { useEffect, useState } from "react";
+import { useMessageBox } from "@/providers/MessageProvider";
+import { useRouter } from "next/navigation";
+// import { redirect } from "next/navigation";
 
 const TicketReplyPage = ({ params }) => {
   const [ticket, setTicket] = useState();
   const [showForm, setShowForm] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const showMessage = useMessageBox();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTicket = async (id) => {
@@ -20,10 +25,17 @@ const TicketReplyPage = ({ params }) => {
 
       if (item) {
         setTicket(item);
+      } else {
+        showMessage(
+          "error",
+          "Failed to fetch ticket or you don't have permission to view this ticket"
+        );
+        router.push("/dashboard/ticket");
       }
     };
 
     fetchTicket(params.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params, refresh]);
 
   const handleShowForm = () => {
@@ -36,17 +48,17 @@ const TicketReplyPage = ({ params }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 text-sm flex-wrap ">
+    <div className="flex flex-col gap-3 py-6 px-6 bg-white mt-4 rounded w-full min-w-[300px] mb-6 shadow-md">
       <div className="flex justify-end">
         <div className="w-fit">
           <BackButton url={"/dashboard/ticket"} />
         </div>
       </div>
       {/* ticket info */}
-      <div className="flex flex-col gap-2 border-2 border-dotted border-slate-400 rounded-md p-6">
+      <div className="flex flex-col gap-2 border border-gray-300 rounded-md p-6">
         <div>
           <span className="font-bold text-slate-500">Ticket ID : </span>
-          <span className="font-bold text-blue-700">{ticket?.id}</span>
+          <span className="font-bold text-blue-700">#{ticket?.slug}</span>
         </div>
         <div className="flex justify-between border-b-2 pb-2 border-slate-400">
           <div className="flex items-center gap-2">
@@ -56,10 +68,10 @@ const TicketReplyPage = ({ params }) => {
           <div>
             {/* {format(new Date(ticket?.createdAt), "yyyy/MM/dd, HH:mm:ss")} */}
           </div>
-          <div>
+          <div className="mb-2">
             <span className="font-bold text-slate-500">Status : </span>
             <span
-              className="text-slate-50 px-3 py-1 rounded-full"
+              className="text-slate-50 py-2 px-4 rounded-full"
               style={{
                 backgroundColor:
                   ticket?.status === "CREATED"
@@ -74,7 +86,7 @@ const TicketReplyPage = ({ params }) => {
           </div>
         </div>
 
-        <div>
+        <div className="mb-4 mt-2">
           <span className="font-bold text-slate-500">Content : </span>{" "}
           {ticket?.content}
         </div>
@@ -109,7 +121,7 @@ const TicketReplyPage = ({ params }) => {
 
       {ticket?.status !== "CLOSED" && (
         <button
-          className=" bg-green-600 py-2 px-4 w-fit rounded-md shadow-md text-green-50 font-bold hover:bg-green-900"
+          className=" bg-emerald-600 py-2 px-4 w-fit rounded-md shadow-md text-emerald-50 font-bold hover:bg-emerald-900 mt-6"
           onClick={handleShowForm}
         >
           {showForm ? "Cancel Comment" : "Add Comment"}

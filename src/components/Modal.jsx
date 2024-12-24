@@ -14,6 +14,9 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 
   return (
     <div
+      role="dialog"
+      aria-labelledby="modal-title"
+      aria-hidden={!isOpen}
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-md z-[9999]"
       onClick={onClose}
     >

@@ -27,15 +27,15 @@ const OptionBox = ({
   useEffect(() => {
     // setItems(values);
     setChangedId(selectedId);
-  }, [values]);
+  }, [values, selectedId]);
 
   return (
     <div className="flex flex-col">
-      <label className="mb-1 text-zinc-600" htmlFor="name">
+      <label className="mb-1" htmlFor="name">
         {label} {required && <MandatorySpan />} :{" "}
       </label>
       <select
-        className="w-[500px] py-2 px-4 text-zinc-900 border border-gray-400 rounded-md outline-none focus:border-red-500 bg-white"
+        className="w-[500px] py-2 px-4 border border-gray-300 rounded outline-none focus:border-red-500 font-sans text-base"
         name={name}
         value={changedId || "0"}
         onChange={handleChange}

@@ -152,6 +152,7 @@ const TenantForm = ({ selectedTenantId }) => {
           onChange={handleImageChange}
           accept={".jpg,.jpeg,.png,.webp"}
         />
+
         {imagePreview && (
           <Image
             className="border p-2 rounded border-gray-400"

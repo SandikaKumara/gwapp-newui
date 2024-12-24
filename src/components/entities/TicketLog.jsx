@@ -24,18 +24,18 @@ const TicketLog = ({ ticketId, refresh }) => {
     };
 
     fetchTicketLogs(ticketId);
-  }, [ticketId, refresh]);
+  }, [ticketId, refresh, showMessage]);
 
   return (
-    <div className="bg-gray-50 w-full h-full flex flex-col pb-4">
+    <div className=" w-full h-full flex flex-col gap-10 pb-4 mt-10">
       {logs.map((log) => (
         <div
           key={log.id}
-          className="w-full h-fit border-2 border-dotted border-slate-400 rounded-md p-3 shadow-md"
+          className="bg-gray-50 w-full h-fit border border-dotted border-gray-400 rounded-md shadow-md px-4 py-4"
         >
-          <div className="py-2">
+          {/* <div className="py-2">
             <span className="font-bold">ID : </span> {log?.id}
-          </div>
+          </div> */}
 
           <div>
             <span className="font-bold">Comment : </span> {log?.note}
@@ -48,7 +48,7 @@ const TicketLog = ({ ticketId, refresh }) => {
                 download={log?.attachment.split("/").pop()}
                 className="flex gap-2 items-center cursor-pointer text-blue-400"
               >
-                <span className="font-bold text-slate-500">
+                <span className="font-bold text-gray-500">
                   <ImAttachment />
                 </span>
                 {log?.attachment.split("/").pop()}
@@ -56,12 +56,14 @@ const TicketLog = ({ ticketId, refresh }) => {
             </div>
           )}
 
-          <div className="flex justify-between py-2 px-2 bg-slate-200 mt-3">
-            <div className="flex gap-2">
+          <div className="flex justify-between py-2 px-2 bg-gray-200 mt-3">
+            <div className="flex gap-2 text-gray-600">
               <span className="font-bold">User : </span> {log.user?.firstName}{" "}
               {log.user?.lastName}
             </div>
-            <span className="text-xs text-slate-400">
+
+            <div className="text-gray-600 uppercase">#{log?.id}</div>
+            <span className="text-gray-400">
               {" "}
               {format(new Date(log?.createdAt), "yyyy/MM/dd, HH:mm:ss")}
             </span>

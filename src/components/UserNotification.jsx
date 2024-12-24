@@ -19,12 +19,11 @@ function UserNotification({ log, handleShowMessage, children }) {
         <div className="font-bold">
           {log?.notification?.title}
           <span className="font-thin text-sm font-mono text-blue-700">
-            {" "}
-            [{" "}
+            [
             {format(
               new Date(log?.notification?.createdAt),
               "yyyy/MM/dd, HH:mm:ss"
-            )}{" "}
+            )}
             ]
           </span>
         </div>

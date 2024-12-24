@@ -49,7 +49,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col w-full h-fit gap-10 mt-10 px-2">
+    <div className="flex flex-col w-full h-fit gap-10 mt-10 px-4 py-2 bg-white rounded shadow-md">
       <div className="flex justify-between items-center">
         <p className="font-bold">Login Statistics</p>
         <div>

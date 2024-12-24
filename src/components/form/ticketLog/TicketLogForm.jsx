@@ -26,17 +26,19 @@ const TicketLogForm = ({ ticketId, handleShowForm }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-slate-100 p-6 shadow-md flex flex-col gap-3"
+      className="bg-white p-6 shadow-md flex flex-col gap-3 border border-gray-200"
       encType="multipart/form-data"
     >
       <TextArea label={"Note"} rows="5" name={"note"} />
       <InputBox label={"Attachment"} name={"file"} type="file" />
-      <div className="flex items-center gap-2 bg-red-600 w-fit py-1 px-3 text-red-50 rounded-md">
+      <div className="flex items-center gap-2 bg-red-500 w-fit py-2 px-4 text-red-50 rounded-md">
         <input type="checkbox" name="resolved" />
         <span>Resolved</span>
       </div>
 
-      <SaveButton label="Save" />
+      <div className="flex justify-end">
+        <SaveButton label="Save" />
+      </div>
     </form>
   );
 };
